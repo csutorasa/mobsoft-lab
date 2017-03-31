@@ -1,12 +1,12 @@
-package hu.bme.aut.mobsoftlab.ui.main;
+package hu.bme.aut.mobsoftlab.ui.newfavorite;
 
 import java.util.List;
 
 import hu.bme.aut.mobsoftlab.ui.Presenter;
 
-public class MainPresenter extends Presenter<MainScreen> {
+public class NewFavoritePresenter extends Presenter<NewFavoriteScreen> {
     @Override
-    public void attachScreen(MainScreen screen) {
+    public void attachScreen(NewFavoriteScreen screen) {
         super.attachScreen(screen);
     }
 
@@ -15,7 +15,11 @@ public class MainPresenter extends Presenter<MainScreen> {
         super.detachScreen();
     }
 
-    List<String> getFavorites() {
+    void save() {
+
+    }
+
+    List<String> getCurrencies() {
         return null;
     }
 }
