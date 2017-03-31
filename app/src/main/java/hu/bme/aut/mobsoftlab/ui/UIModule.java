@@ -6,7 +6,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import hu.bme.aut.mobsoftlab.ui.currencyexchange.CurrencyExchangePresenter;
+import hu.bme.aut.mobsoftlab.ui.histogram.HistogramPresenter;
 import hu.bme.aut.mobsoftlab.ui.main.MainPresenter;
+import hu.bme.aut.mobsoftlab.ui.newfavorite.NewFavoritePresenter;
 
 @Module
 public class UIModule {
@@ -27,4 +30,21 @@ public class UIModule {
         return new MainPresenter();
     }
 
+    @Provides
+    @Singleton
+    public CurrencyExchangePresenter provideCurrencyExchangePresenter() {
+        return new CurrencyExchangePresenter();
+    }
+
+    @Provides
+    @Singleton
+    public NewFavoritePresenter provideNewFavoritePresenter() {
+        return new NewFavoritePresenter();
+    }
+
+    @Provides
+    @Singleton
+    public HistogramPresenter provideHistogramPresenter() {
+        return new HistogramPresenter();
+    }
 }
