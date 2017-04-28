@@ -36,12 +36,12 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
     }
 
     @Override
-    public void showMessage(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    public void getFavorites() {
+        mainPresenter.getFavorites();
     }
 
     @Override
-    public void getFavorites() {
-        mainPresenter.getFavorites();
+    public void showError(Throwable throwable) {
+        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

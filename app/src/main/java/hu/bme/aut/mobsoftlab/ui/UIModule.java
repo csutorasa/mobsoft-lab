@@ -2,10 +2,14 @@ package hu.bme.aut.mobsoftlab.ui;
 
 import android.content.Context;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import de.greenrobot.event.EventBus;
 import hu.bme.aut.mobsoftlab.ui.currencyexchange.CurrencyExchangePresenter;
 import hu.bme.aut.mobsoftlab.ui.histogram.HistogramPresenter;
 import hu.bme.aut.mobsoftlab.ui.main.MainPresenter;
@@ -46,5 +50,18 @@ public class UIModule {
     @Singleton
     public HistogramPresenter provideHistogramPresenter() {
         return new HistogramPresenter();
+    }
+
+
+    @Provides
+    @Singleton
+    public EventBus provideEventBus() {
+        return EventBus.getDefault();
+    }
+
+    @Provides
+    @Singleton
+    public Executor provideExecutor() {
+        return Executors.newFixedThreadPool(1);
     }
 }

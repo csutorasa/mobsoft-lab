@@ -1,11 +1,14 @@
 package hu.bme.aut.mobsoftlab.model;
 
+import java.util.Date;
+
 public class ExchangeWithRates {
     private Long id;
 
     private String from;
     private String to;
     private Double rate;
+    private Date date;
 
     public ExchangeWithRates() {
 
@@ -47,5 +50,13 @@ public class ExchangeWithRates {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

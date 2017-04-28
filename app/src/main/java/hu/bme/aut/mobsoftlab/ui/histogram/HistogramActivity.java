@@ -37,4 +37,10 @@ public class HistogramActivity extends AppCompatActivity implements HistogramScr
     public void deleteFavorite() {
         presenter.deleteFavorite();
     }
+
+
+    @Override
+    public void showError(Throwable throwable) {
+        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+    }
 }

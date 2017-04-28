@@ -2,6 +2,7 @@ package hu.bme.aut.mobsoftlab.ui.newfavorite;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -35,5 +36,15 @@ public class NewFavoriteActivity extends AppCompatActivity implements NewFavorit
     @Override
     public void save() {
         presenter.save();
+    }
+
+    @Override
+    public void swapCurrencies() {
+        // TODO swap from and to
+    }
+
+    @Override
+    public void showError(Throwable throwable) {
+        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }
