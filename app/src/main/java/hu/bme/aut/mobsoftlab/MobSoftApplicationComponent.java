@@ -3,6 +3,7 @@ package hu.bme.aut.mobsoftlab;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import hu.bme.aut.mobsoftlab.interactor.favorite.FavoritesInteractor;
 import hu.bme.aut.mobsoftlab.ui.UIModule;
 import hu.bme.aut.mobsoftlab.ui.currencyexchange.CurrencyExchangeActivity;
 import hu.bme.aut.mobsoftlab.ui.histogram.HistogramActivity;
@@ -16,4 +17,5 @@ public interface MobSoftApplicationComponent {
     void inject(HistogramActivity histogramActivity);
     void inject(NewFavoriteActivity newFavoriteActivity);
     void inject(CurrencyExchangeActivity currencyExchangeActivity);
+    void inject(FavoritesInteractor favoritesInteractor);
 }
