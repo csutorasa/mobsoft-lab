@@ -1,0 +1,153 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "",
+    "version": "1.0.0",
+    "title": "Currency exchange app",
+    "termsOfService": "",
+    "contact": {
+      "email": "csutorasa@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "tags": [
+    {
+      "name": "Currency",
+      "description": "Everything about currencies"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/rates": {
+      "get": {
+        "tags": [
+          "Currency"
+        ],
+        "description": "Gets the rates of the currencies",
+        "operationId": "getRates",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "filter",
+            "description": "Filters the from and to currencies. Comma separated hyphen connected values. Example: ?filter=EUR-HUF,EUR-USD",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the currency rates",
+            "schema": {
+              "$ref": "#/definitions/GetRatesResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid filter"
+          }
+        }
+      }
+    },
+    "/histogram/{from}/{to}": {
+      "get": {
+        "tags": [
+          "Currency"
+        ],
+        "description": "Gets the historical rates of the currencies.",
+        "operationId": "getHistogram",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "from",
+            "description": "From currency",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "to",
+            "description": "To currency",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the currency rates",
+            "schema": {
+              "$ref": "#/definitions/GetHistogramResponse"
+            }
+          },
+          "404": {
+            "description": "Invalid from or to currency"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ExchangeRateWithCurrency": {
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "rate": {
+          "type": "number"
+        }
+      }
+    },
+    "RateWithDate": {
+      "type": "object",
+      "properties": {
+        "rate": {
+          "type": "number"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "GetRatesResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ExchangeRateWithCurrency"
+          }
+        }
+      }
+    },
+    "GetHistogramResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RateWithDate"
+          }
+        }
+      }
+    }
+  }
+}
