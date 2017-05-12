@@ -11,7 +11,7 @@ import hu.bme.aut.mobsoftlab.R;
 
 public class HistogramActivity extends AppCompatActivity implements HistogramScreen {
     @Inject
-    protected HistogramPresenter presenter;
+    public HistogramPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

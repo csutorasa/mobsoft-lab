@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import hu.bme.aut.mobsoftlab.interactor.InteractorModule;
 import hu.bme.aut.mobsoftlab.interactor.favorite.FavoritesInteractor;
+import hu.bme.aut.mobsoftlab.network.NetworkModule;
 import hu.bme.aut.mobsoftlab.repository.RepositoryModule;
 import hu.bme.aut.mobsoftlab.ui.UIModule;
 import hu.bme.aut.mobsoftlab.ui.currencyexchange.CurrencyExchangeActivity;
@@ -17,8 +18,10 @@ import hu.bme.aut.mobsoftlab.ui.newfavorite.NewFavoriteActivity;
 import hu.bme.aut.mobsoftlab.ui.newfavorite.NewFavoritePresenter;
 
 @Singleton
-@Component(modules = {UIModule.class, RepositoryModule.class, InteractorModule.class})
+@Component(modules = {UIModule.class, RepositoryModule.class, InteractorModule.class, NetworkModule.class})
 public interface MobSoftApplicationComponent {
+    void setInjector(MobSoftApplicationComponent appComponent);
+    void inject(MobSoftApplication appComponent);
     void inject(MainActivity mainActivity);
     void inject(HistogramActivity histogramActivity);
     void inject(NewFavoriteActivity newFavoriteActivity);
