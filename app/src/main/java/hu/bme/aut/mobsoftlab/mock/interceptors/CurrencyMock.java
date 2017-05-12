@@ -4,8 +4,11 @@ import android.net.Uri;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Random;
 
 import hu.bme.aut.mobsoftlab.model.ExchangeRateWithCurrency;
 import hu.bme.aut.mobsoftlab.model.GetHistogramResponse;
@@ -21,6 +24,8 @@ import okhttp3.Response;
 import static hu.bme.aut.mobsoftlab.mock.interceptors.MockHelper.makeResponse;
 
 public class CurrencyMock {
+    private static Random rnd = new Random();
+
     public static Response process(Request request) {
         Uri uri = Uri.parse(request.url().toString());
 
@@ -28,13 +33,47 @@ public class CurrencyMock {
         int responseCode;
         Headers headers = request.headers();
 
-
-        if (uri.getPath().equals(NetworkConfig.ENDPOINT_PREFIX + "rates") && request.method().equals("GET")) {
+        if (uri.getPath().startsWith(NetworkConfig.ENDPOINT_PREFIX + "rates") && request.method().equals("GET")) {
             GetRatesResponse response = new GetRatesResponse();
-            response.getRates().addAll(getExchangeRates());
-            responseString = GsonHelper.getGson().toJson(response);
-            responseCode = 200;
-        }else if (uri.getPath().startsWith(NetworkConfig.ENDPOINT_PREFIX + "histogram/") && request.method().equals("GET")) {
+            List<ExchangeRateWithCurrency> allRates = getExchangeRates();
+            String params = uri.getPath().replace(NetworkConfig.ENDPOINT_PREFIX + "rates", "");
+            if(params.length() != 0) {
+                if(params.startsWith("?")) {
+                    List<ExchangeRateWithCurrency> filteredRates = new ArrayList<>();
+                    params = params.replace("?", "");
+                    String[] exchanges = params.split(",");
+                    for (String exchange : exchanges) {
+                        String[] fromto = exchange.split("=");
+                        if(fromto.length != 2) {
+                            boolean found = false;
+                            for (ExchangeRateWithCurrency exchangeRate : allRates) {
+                                if(exchangeRate.getFrom().equals(fromto[0]) && exchangeRate.getTo().equals(fromto[1])) {
+                                    filteredRates.add(exchangeRate);
+                                    found = true;
+                                }
+                            }
+                            if(!found) {
+                                responseString = "Invalid filter";
+                                responseCode = 404;
+                            }
+                        } else {
+                            responseString = "Invalid filter";
+                            responseCode = 404;
+                        }
+                    }
+                    response.setRates(filteredRates);
+                    responseString = GsonHelper.getGson().toJson(response);
+                    responseCode = 200;
+                } else {
+                    responseString = "Invalid filter";
+                    responseCode = 404;
+                }
+            } else {
+                response.setRates(allRates);
+                responseString = GsonHelper.getGson().toJson(response);
+                responseCode = 200;
+            }
+        } else if (uri.getPath().startsWith(NetworkConfig.ENDPOINT_PREFIX + "histogram/") && request.method().equals("GET")) {
             GetHistogramResponse response = new GetHistogramResponse();
             response.getRates().addAll(getHistogramData());
             responseString = GsonHelper.getGson().toJson(response);
@@ -54,25 +93,37 @@ public class CurrencyMock {
         exchangeRate = new ExchangeRateWithCurrency();
         exchangeRate.setFrom("HUF");
         exchangeRate.setTo("EUR");
-        exchangeRate.setRate(BigDecimal.valueOf(0.03));
+        exchangeRate.setRate(getRate(0.03));
         exchangeRates.add(exchangeRate);
 
         exchangeRate = new ExchangeRateWithCurrency();
         exchangeRate.setFrom("EUR");
         exchangeRate.setTo("HUF");
-        exchangeRate.setRate(BigDecimal.valueOf(330));
+        exchangeRate.setRate(getRate(330));
         exchangeRates.add(exchangeRate);
 
         exchangeRate = new ExchangeRateWithCurrency();
         exchangeRate.setFrom("HUF");
         exchangeRate.setTo("USD");
-        exchangeRate.setRate(BigDecimal.valueOf(0.033));
+        exchangeRate.setRate(getRate(0.033));
         exchangeRates.add(exchangeRate);
 
         exchangeRate = new ExchangeRateWithCurrency();
         exchangeRate.setFrom("USD");
         exchangeRate.setTo("HUF");
-        exchangeRate.setRate(BigDecimal.valueOf(300));
+        exchangeRate.setRate(getRate(300));
+        exchangeRates.add(exchangeRate);
+
+        exchangeRate = new ExchangeRateWithCurrency();
+        exchangeRate.setFrom("EUR");
+        exchangeRate.setTo("USD");
+        exchangeRate.setRate(getRate(1.1));
+        exchangeRates.add(exchangeRate);
+
+        exchangeRate = new ExchangeRateWithCurrency();
+        exchangeRate.setFrom("USD");
+        exchangeRate.setTo("EUR");
+        exchangeRate.setRate(getRate(0.9));
         exchangeRates.add(exchangeRate);
 
         return exchangeRates;
@@ -80,28 +131,37 @@ public class CurrencyMock {
 
     private static List<RateWithDate> getHistogramData() {
         List<RateWithDate> rates = new ArrayList<>();
+        Calendar calendar = new GregorianCalendar();
         RateWithDate rate;
 
         rate = new RateWithDate();
-        rate.setDate(new Date());
-        rate.setRate(BigDecimal.valueOf(1));
+        rate.setDate(calendar.getTime());
+        rate.setRate(getRate(1));
         rates.add(rate);
+        calendar.add(Calendar.DATE, -1);
 
         rate = new RateWithDate();
-        rate.setDate(new Date());
-        rate.setRate(BigDecimal.valueOf(0.9));
+        rate.setDate(calendar.getTime());
+        rate.setRate(getRate(0.9));
         rates.add(rate);
+        calendar.add(Calendar.DATE, -1);
 
         rate = new RateWithDate();
-        rate.setDate(new Date());
-        rate.setRate(BigDecimal.valueOf(1.1));
+        rate.setDate(calendar.getTime());
+        rate.setRate(getRate(1.1));
         rates.add(rate);
+        calendar.add(Calendar.DATE, -1);
 
         rate = new RateWithDate();
-        rate.setDate(new Date());
-        rate.setRate(BigDecimal.valueOf(1.2));
+        rate.setDate(calendar.getTime());
+        rate.setRate(getRate(1.2));
         rates.add(rate);
 
         return rates;
+    }
+
+    private static BigDecimal getRate(double rate) {
+        double randomness = 0.1;
+        return new BigDecimal(rate * (rnd.nextDouble() * randomness * 2 + 1 - randomness));
     }
 }

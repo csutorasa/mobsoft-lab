@@ -1,4 +1,4 @@
-package hu.bme.aut.mobsoftlab;
+package hu.bme.aut.mobsoftlab.test;
 
 import org.junit.After;
 import org.junit.Before;
@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
 
+import hu.bme.aut.mobsoftlab.BuildConfig;
 import hu.bme.aut.mobsoftlab.ui.main.MainPresenter;
 import hu.bme.aut.mobsoftlab.ui.main.MainScreen;
 import hu.bme.aut.mobsoftlab.utils.RobolectricDaggerTestRunner;
