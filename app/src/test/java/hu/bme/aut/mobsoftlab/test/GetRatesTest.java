@@ -20,30 +20,19 @@ import static org.mockito.Mockito.verify;
 @Config(constants = BuildConfig.class, sdk = 21)
 public class GetRatesTest {
 
-    private MainPresenter mainPresenter;
+
 
     @Before
     public void setup() throws Exception {
         setTestInjector();
-        mainPresenter = new MainPresenter();
     }
 
     @Test
     public void testTodo() {
-        MainScreen mainScreen = mock(MainScreen.class);
-        mainPresenter.attachScreen(mainScreen);
-        /*mainPresenter.getFavourites();
-
-        ArgumentCaptor<String> todosCaptor = ArgumentCaptor.forClass(String.class);
-        verify(mainScreen, times(2)).showMessage(todosCaptor.capture());
-
-        List<String> capturedTodos = todosCaptor.getAllValues();
-        assertEquals("todo one", capturedTodos.get(0));
-        assertEquals("todo two", capturedTodos.get(1));*/
     }
 
     @After
     public void tearDown() {
-        mainPresenter.detachScreen();
+
     }
 }

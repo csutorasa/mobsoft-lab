@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_new"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="hu.bme.aut.mobsoftlab.ui.newfavorite.NewFavoriteActivity">
+
+    <TextView android:id="@+id/newFavoriteSourceText"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="@string/source"/>
+    <TextView android:id="@+id/newFavoriteFromText"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"/>
+    <ListView android:id="@+id/newFavoriteSourceList"
+        android:layout_width="match_parent" android:layout_height="150dp"
+        android:layout_below="@id/newFavoriteSourceText"
+        />
+
+    <Button android:id="@+id/newFavoriteSwapButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newFavoriteSourceList"
+        android:text="@string/swap"
+        />
+
+    <TextView android:id="@+id/newFavoriteTargetText"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_below="@id/newFavoriteSwapButton"
+        android:text="@string/target"/>
+    <TextView android:id="@+id/newFavoriteToText"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_below="@id/newFavoriteSwapButton"
+        android:layout_alignParentRight="true"/>
+    <ListView android:id="@+id/newFavoriteTargetList"
+        android:layout_width="match_parent" android:layout_height="150dp"
+        android:layout_below="@id/newFavoriteTargetText"
+        />
+
+    <Button android:id="@+id/newFavoriteSaveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newFavoriteTargetList"
+        android:text="@string/save"
+        />
+</RelativeLayout>

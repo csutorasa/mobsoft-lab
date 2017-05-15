@@ -1,5 +1,7 @@
 package hu.bme.aut.mobsoftlab.ui.main;
 
+import android.widget.Toast;
+
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -10,6 +12,7 @@ import hu.bme.aut.mobsoftlab.interactor.favorite.FavoritesInteractor;
 import hu.bme.aut.mobsoftlab.interactor.favorite.events.GetFavoritesEvent;
 import hu.bme.aut.mobsoftlab.interactor.favorite.events.SaveFavoriteEvent;
 import hu.bme.aut.mobsoftlab.model.Exchange;
+import hu.bme.aut.mobsoftlab.network.currency.CurrencyApi;
 import hu.bme.aut.mobsoftlab.ui.Presenter;
 
 import static hu.bme.aut.mobsoftlab.MobSoftApplication.injector;
@@ -18,6 +21,9 @@ public class MainPresenter extends Presenter<MainScreen> {
 
     @Inject
     FavoritesInteractor favoritesInteractor;
+
+    @Inject
+    CurrencyApi currencyApi;
 
     @Inject
     Executor executor;
@@ -61,7 +67,7 @@ public class MainPresenter extends Presenter<MainScreen> {
     }
 
     void getFavoriteRates(List<Exchange> favorites) {
-        // TODO network call
-        // TODO then show elements
+        currencyApi.getRates("");
+        screen.showFavorites(favorites);
     }
 }

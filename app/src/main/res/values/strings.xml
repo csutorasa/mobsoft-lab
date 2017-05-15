@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">MobSoftLab</string>
+    <string name="app_name">Currency exchanger</string>
+    <string name="new_favorite">New Favorite</string>
+    <string name="exchange">Exchange</string>
+    <string name="histogram">Histogram</string>
+    <string name="refresh">Refresh</string>
+    <string name="source">Source currency</string>
+    <string name="target">Target currency</string>
+    <string name="swap">Swap</string>
+    <string name="save">Save</string>
+    <string name="delete_favorite">Delete favorite</string>
+    <string name="source_value">Source value</string>
+    <string name="target_value">Target value</string>
 </resources>

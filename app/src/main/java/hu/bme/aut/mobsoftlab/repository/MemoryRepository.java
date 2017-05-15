@@ -16,7 +16,7 @@ public class MemoryRepository implements Repository {
         favorites = new ArrayList<>();
 
         favorites.add(new Exchange("HUF", "EUR"));
-        favorites.add(new Exchange("EUR", "HUF"));
+        favorites.add(new Exchange("USD", "HUF"));
     }
 
     @Override

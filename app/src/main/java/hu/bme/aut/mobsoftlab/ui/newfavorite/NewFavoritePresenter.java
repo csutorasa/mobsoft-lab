@@ -1,6 +1,8 @@
 package hu.bme.aut.mobsoftlab.ui.newfavorite;
 
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -40,18 +42,16 @@ public class NewFavoritePresenter extends Presenter<NewFavoriteScreen> {
         super.detachScreen();
     }
 
-    public void save() {
+    public void save(final String from, final String to) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                // TODO save real exchange object
-                favoritesInteractor.saveFavorite(new Exchange());
+            Exchange exchange = new Exchange();
+            exchange.setFrom(from);
+            exchange.setTo(to);
+            favoritesInteractor.saveFavorite(exchange);
             }
         });
-    }
-
-    public void getCurrencies() {
-        // TODO get all available currencies
     }
 
     public void onEventMainThread(SaveFavoriteEvent event) {
@@ -62,7 +62,7 @@ public class NewFavoritePresenter extends Presenter<NewFavoriteScreen> {
             }
         } else {
             if (screen != null) {
-                // TODO navigate to main screen
+                screen.navigateBack();
             }
         }
     }

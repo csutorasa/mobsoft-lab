@@ -21,7 +21,7 @@
             android:value="true"/>
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
-            android:value="hu.bme.aut.mobsoft.mobsoftlab.model"/>
+            android:value="hu.bme.aut.mobsoftlab.model"/>
 
 
         <activity android:name=".ui.main.MainActivity">
@@ -30,6 +30,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.newfavorite.NewFavoriteActivity"
+            android:label="@string/new_favorite"
+            android:parentActivityName=".ui.main.MainActivity">
+        </activity>
+        <activity android:name=".ui.histogram.HistogramActivity"
+            android:label="@string/histogram"
+            android:parentActivityName=".ui.main.MainActivity">
+        </activity>
+        <activity android:name=".ui.currencyexchange.CurrencyExchangeActivity"
+            android:label="@string/exchange"
+            android:parentActivityName=".ui.main.MainActivity">
         </activity>
     </application>
 

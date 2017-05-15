@@ -35,7 +35,7 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public CurrencyApi provideATodoApi(Retrofit retrofit) {
+    public CurrencyApi provideACurrencyApi(Retrofit retrofit) {
         return retrofit.create(CurrencyApi.class);
     }
 

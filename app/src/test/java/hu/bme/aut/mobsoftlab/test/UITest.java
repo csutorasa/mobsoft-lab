@@ -6,8 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
 
-import javax.inject.Inject;
-
 import hu.bme.aut.mobsoftlab.BuildConfig;
 import hu.bme.aut.mobsoftlab.ui.main.MainPresenter;
 import hu.bme.aut.mobsoftlab.ui.main.MainScreen;
@@ -18,10 +16,9 @@ import static org.mockito.Mockito.mock;
 
 @RunWith(RobolectricDaggerTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
-public class HistogramTest {
+public class UITest {
 
-    @Inject
-    protected MainPresenter mainPresenter;
+    private MainPresenter mainPresenter;
 
     @Before
     public void setup() throws Exception {
