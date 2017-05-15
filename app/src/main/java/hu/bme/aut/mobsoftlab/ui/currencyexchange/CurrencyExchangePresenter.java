@@ -45,7 +45,7 @@ public class CurrencyExchangePresenter extends Presenter<CurrencyExchangeScreen>
         super.detachScreen();
     }
 
-    void getExchangeRate(String from, String to) {
+    public void getExchangeRate(String from, String to) {
         favoritesInteractor.getRates(Arrays.asList(new Pair<String, String>(from ,to)));
     }
 
