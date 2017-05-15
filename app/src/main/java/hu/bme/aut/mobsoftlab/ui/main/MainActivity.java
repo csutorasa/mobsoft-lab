@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ import javax.inject.Inject;
 import hu.bme.aut.mobsoftlab.MobSoftApplication;
 import hu.bme.aut.mobsoftlab.R;
 import hu.bme.aut.mobsoftlab.model.Exchange;
+import hu.bme.aut.mobsoftlab.model.ExchangeRateWithCurrency;
 import hu.bme.aut.mobsoftlab.ui.currencyexchange.CurrencyExchangeActivity;
 import hu.bme.aut.mobsoftlab.ui.histogram.HistogramActivity;
 import hu.bme.aut.mobsoftlab.ui.newfavorite.NewFavoriteActivity;
@@ -56,7 +58,14 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
         favoritesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(MainActivity.this, HistogramActivity.class));
+                String text = favoritesAdapter.getItem(position);
+                String[] words = text.split(" ");
+                String from = words[0];
+                String to = words[2];
+                Intent intent = new Intent(MainActivity.this, HistogramActivity.class);
+                intent.putExtra("from", from);
+                intent.putExtra("to", to);
+                startActivity(intent);
             }
         });
 
@@ -117,11 +126,10 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
         mainPresenter.getFavorites();
     }
 
-    @Override
-    public void showFavorites(List<Exchange> exchanges) {
+    public void showFavorites(List<ExchangeRateWithCurrency> rates) {
         favoritesAdapter.clear();
-        for (Exchange e : exchanges) {
-            favoritesAdapter.add(e.getFrom() + " - " + e.getTo() + "xxx");
+        for (ExchangeRateWithCurrency e : rates) {
+            favoritesAdapter.add(e.getFrom() + " - " + e.getTo() + " " + e.getRate().setScale(3, BigDecimal.ROUND_HALF_UP));
         }
         favoritesAdapter.notifyDataSetChanged();
     }

@@ -35,6 +35,10 @@ public class SugarOrmRepository implements Repository {
         SugarRecord.deleteInTx(exchange);
     }
 
+    public void removeFavorite(String from, String to) {
+        SugarRecord.deleteAll(Exchange.class, "from = ? and to = ?", from, to);
+    }
+
     @Override
     public boolean isFavorite(Exchange exchange) {
         return SugarRecord.findById(Exchange.class, exchange.getId()) != null;

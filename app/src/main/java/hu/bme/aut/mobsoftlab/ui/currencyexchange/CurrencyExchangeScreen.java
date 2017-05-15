@@ -1,9 +1,9 @@
 package hu.bme.aut.mobsoftlab.ui.currencyexchange;
 
-public interface CurrencyExchangeScreen {
-    void exchange();
+import java.math.BigDecimal;
 
-    void swapCurrencies();
+public interface CurrencyExchangeScreen {
+    void setExchangeRate(BigDecimal d);
 
     void showError(Throwable throwable);
 }

@@ -26,6 +26,9 @@ import static hu.bme.aut.mobsoftlab.mock.interceptors.MockHelper.makeResponse;
 public class CurrencyMock {
     private static Random rnd = new Random();
 
+    private static final int OK = 200;
+    private static final int BAD_REQUEST = 400;
+
     public static Response process(Request request) {
         Uri uri = Uri.parse(request.url().toString());
 
@@ -36,48 +39,45 @@ public class CurrencyMock {
         if (uri.getPath().startsWith(NetworkConfig.ENDPOINT_PREFIX + "rates") && request.method().equals("GET")) {
             GetRatesResponse response = new GetRatesResponse();
             List<ExchangeRateWithCurrency> allRates = getExchangeRates();
-            String params = uri.getPath().replace(NetworkConfig.ENDPOINT_PREFIX + "rates", "");
+            String x = uri.getPath();
+
+            String params = uri.getQueryParameter("filter");
             if(params.length() != 0) {
-                if(params.startsWith("?")) {
-                    List<ExchangeRateWithCurrency> filteredRates = new ArrayList<>();
-                    params = params.replace("?", "");
-                    String[] exchanges = params.split(",");
-                    for (String exchange : exchanges) {
-                        String[] fromto = exchange.split("=");
-                        if(fromto.length != 2) {
-                            boolean found = false;
-                            for (ExchangeRateWithCurrency exchangeRate : allRates) {
-                                if(exchangeRate.getFrom().equals(fromto[0]) && exchangeRate.getTo().equals(fromto[1])) {
-                                    filteredRates.add(exchangeRate);
-                                    found = true;
-                                }
+                List<ExchangeRateWithCurrency> filteredRates = new ArrayList<>();
+                String[] exchanges = params.split(",");
+                for (String exchange : exchanges) {
+                    String[] fromto = exchange.split("-");
+                    if(fromto.length == 2) {
+                        boolean found = false;
+                        for (ExchangeRateWithCurrency exchangeRate : allRates) {
+                            if(exchangeRate.getFrom().equals(fromto[0]) && exchangeRate.getTo().equals(fromto[1])) {
+                                filteredRates.add(exchangeRate);
+                                found = true;
+                                break;
                             }
-                            if(!found) {
-                                responseString = "Invalid filter";
-                                responseCode = 404;
-                            }
-                        } else {
-                            responseString = "Invalid filter";
-                            responseCode = 404;
                         }
+                        if(!found) {
+                            responseString = "Invalid filter";
+                            responseCode = BAD_REQUEST;
+                        }
+                    } else {
+                        responseString = "Invalid filter";
+                        responseCode = BAD_REQUEST;
                     }
-                    response.setRates(filteredRates);
-                    responseString = GsonHelper.getGson().toJson(response);
-                    responseCode = 200;
-                } else {
-                    responseString = "Invalid filter";
-                    responseCode = 404;
                 }
+                response.setRates(filteredRates);
+                responseString = GsonHelper.getGson().toJson(response);
+                responseCode = OK;
             } else {
                 response.setRates(allRates);
                 responseString = GsonHelper.getGson().toJson(response);
-                responseCode = 200;
+                responseCode = OK;
             }
         } else if (uri.getPath().startsWith(NetworkConfig.ENDPOINT_PREFIX + "histogram/") && request.method().equals("GET")) {
             GetHistogramResponse response = new GetHistogramResponse();
             response.getRates().addAll(getHistogramData());
             responseString = GsonHelper.getGson().toJson(response);
-            responseCode = 200;
+            responseCode = OK;
         } else {
             responseString = "ERROR";
             responseCode = 503;
@@ -124,6 +124,24 @@ public class CurrencyMock {
         exchangeRate.setFrom("USD");
         exchangeRate.setTo("EUR");
         exchangeRate.setRate(getRate(0.9));
+        exchangeRates.add(exchangeRate);
+
+        exchangeRate = new ExchangeRateWithCurrency();
+        exchangeRate.setFrom("EUR");
+        exchangeRate.setTo("EUR");
+        exchangeRate.setRate(BigDecimal.ONE);
+        exchangeRates.add(exchangeRate);
+
+        exchangeRate = new ExchangeRateWithCurrency();
+        exchangeRate.setFrom("USD");
+        exchangeRate.setTo("USD");
+        exchangeRate.setRate(BigDecimal.ONE);
+        exchangeRates.add(exchangeRate);
+
+        exchangeRate = new ExchangeRateWithCurrency();
+        exchangeRate.setFrom("HUF");
+        exchangeRate.setTo("HUF");
+        exchangeRate.setRate(BigDecimal.ONE);
         exchangeRates.add(exchangeRate);
 
         return exchangeRates;

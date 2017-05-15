@@ -1,10 +1,12 @@
 package hu.bme.aut.mobsoftlab.ui.currencyexchange;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,11 +16,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
+
 import javax.inject.Inject;
 
 import hu.bme.aut.mobsoftlab.MobSoftApplication;
 import hu.bme.aut.mobsoftlab.R;
 import hu.bme.aut.mobsoftlab.mock.MockCurrencies;
+import hu.bme.aut.mobsoftlab.ui.newfavorite.NewFavoriteActivity;
 
 public class CurrencyExchangeActivity extends AppCompatActivity implements CurrencyExchangeScreen {
     @Inject
@@ -27,7 +32,7 @@ public class CurrencyExchangeActivity extends AppCompatActivity implements Curre
     String from;
     String to;
     double value;
-    double rate;
+    BigDecimal rate;
 
     EditText inputText;
     TextView resultText;
@@ -60,7 +65,8 @@ public class CurrencyExchangeActivity extends AppCompatActivity implements Curre
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 from = sourceAdapter.getItem(position);
-                resultText.setText(from);
+                exchange();
+                setResultText();
             }
         });
 
@@ -68,6 +74,7 @@ public class CurrencyExchangeActivity extends AppCompatActivity implements Curre
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 to = targetAdapter.getItem(position);
+                exchange();
                 setResultText();
             }
         });
@@ -76,6 +83,7 @@ public class CurrencyExchangeActivity extends AppCompatActivity implements Curre
             @Override
             public void onClick(View v) {
                 swapCurrencies();
+                exchange();
             }
         });
 
@@ -89,8 +97,9 @@ public class CurrencyExchangeActivity extends AppCompatActivity implements Curre
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     value = Double.parseDouble(inputText.getText().toString());
+                    exchange();
+                    setResultText();
                 } catch(NumberFormatException e) { }
-                setResultText();
             }
 
             @Override
@@ -101,13 +110,20 @@ public class CurrencyExchangeActivity extends AppCompatActivity implements Curre
     }
 
     private void setResultText() {
-        resultText.setText(value + " " + from + " = " + (rate * value) + to);
+        if(from != null && to != null) {
+            resultText.setText(value + " " + from + " = " + (rate.doubleValue() * value) + to);
+        } else {
+            resultText.setText("");
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         presenter.attachScreen(this);
+
+        from = null;
+        to = null;
     }
 
     @Override
@@ -116,12 +132,12 @@ public class CurrencyExchangeActivity extends AppCompatActivity implements Curre
         presenter.detachScreen();
     }
 
-    @Override
     public void exchange() {
-        presenter.getExchangeRate(from, to);
+        if(from != null && to != null) {
+            presenter.getExchangeRate(from, to);
+        }
     }
 
-    @Override
     public void swapCurrencies() {
         String temp = from;
         from = to;
@@ -130,7 +146,29 @@ public class CurrencyExchangeActivity extends AppCompatActivity implements Curre
     }
 
     @Override
+    public void setExchangeRate(BigDecimal d) {
+        rate = d;
+        setResultText();
+    }
+
+    @Override
     public void showError(Throwable throwable) {
         Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.exchange_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.exchangeRefresh:
+                exchange();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

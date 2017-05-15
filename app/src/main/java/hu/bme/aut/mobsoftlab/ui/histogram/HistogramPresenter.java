@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 import hu.bme.aut.mobsoftlab.interactor.favorite.FavoritesInteractor;
+import hu.bme.aut.mobsoftlab.interactor.favorite.events.GetHistogramEvent;
 import hu.bme.aut.mobsoftlab.interactor.favorite.events.RemoveFavoriteEvent;
 import hu.bme.aut.mobsoftlab.interactor.favorite.events.SaveFavoriteEvent;
 import hu.bme.aut.mobsoftlab.model.Exchange;
@@ -37,17 +38,20 @@ public class HistogramPresenter extends Presenter<HistogramScreen> {
         super.detachScreen();
     }
 
-    public void loadHistogram() {
-        // TODO load histogram from network
-        // TODO then show result
-    }
-
-    public void deleteFavorite() {
+    public void loadHistogram(final String from, final String to) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                // TODO remove real exchange object
-                favoritesInteractor.saveFavorite(new Exchange());
+                favoritesInteractor.getHistogram(from, to);
+            }
+        });
+    }
+
+    public void deleteFavorite(final String from, final String to) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                favoritesInteractor.removeFavorite(from, to);
             }
         });
     }
@@ -60,7 +64,20 @@ public class HistogramPresenter extends Presenter<HistogramScreen> {
             }
         } else {
             if (screen != null) {
-                // TODO navigate to main screen
+                screen.navigateBack();
+            }
+        }
+    }
+
+    public void onEventMainThread(GetHistogramEvent event) {
+        if (event.getThrowable() != null) {
+            event.getThrowable().printStackTrace();
+            if (screen != null) {
+                screen.showError(event.getThrowable());
+            }
+        } else {
+            if (screen != null) {
+                screen.showHistogram(event.getResponse().getRates());
             }
         }
     }

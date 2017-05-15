@@ -1,5 +1,9 @@
 package hu.bme.aut.mobsoftlab.ui.currencyexchange;
 
+import android.icu.text.TimeZoneFormat;
+import android.util.Pair;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -7,8 +11,10 @@ import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 import hu.bme.aut.mobsoftlab.interactor.favorite.FavoritesInteractor;
+import hu.bme.aut.mobsoftlab.interactor.favorite.events.GetRatesEvent;
 import hu.bme.aut.mobsoftlab.interactor.favorite.events.SaveFavoriteEvent;
 import hu.bme.aut.mobsoftlab.model.Exchange;
+import hu.bme.aut.mobsoftlab.model.ExchangeRateWithCurrency;
 import hu.bme.aut.mobsoftlab.model.GetRatesResponse;
 import hu.bme.aut.mobsoftlab.network.currency.CurrencyApi;
 import hu.bme.aut.mobsoftlab.ui.Presenter;
@@ -19,9 +25,6 @@ public class CurrencyExchangePresenter extends Presenter<CurrencyExchangeScreen>
 
     @Inject
     FavoritesInteractor favoritesInteractor;
-
-    @Inject
-    CurrencyApi currencyApi;
 
     @Inject
     Executor executor;
@@ -43,10 +46,13 @@ public class CurrencyExchangePresenter extends Presenter<CurrencyExchangeScreen>
     }
 
     void getExchangeRate(String from, String to) {
-        // TODO get currency rates from network
-        // List<GetRatesResponse> rates = currencyApi.getRates(from + "=" + to);
+        favoritesInteractor.getRates(Arrays.asList(new Pair<String, String>(from ,to)));
     }
 
-    public void onEventMainThread(Object event) {
+    public void onEventMainThread(GetRatesEvent event) {
+        List<ExchangeRateWithCurrency> rates = event.getResponse().getRates();
+        if(!rates.isEmpty()) {
+            screen.setExchangeRate(rates.get(0).getRate());
+        }
     }
 }

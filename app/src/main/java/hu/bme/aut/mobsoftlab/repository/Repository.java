@@ -19,5 +19,7 @@ public interface Repository {
 
     void removeFavorite(Exchange exchange);
 
+    void removeFavorite(String from, String to);
+
     boolean isFavorite(Exchange exchange);
 }
