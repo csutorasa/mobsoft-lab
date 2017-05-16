@@ -21,6 +21,11 @@ public class SugarOrmRepository implements Repository {
     }
 
     @Override
+    public void clear() {
+        SugarRecord.deleteAll(Exchange.class);
+    }
+
+    @Override
     public List<Exchange> getFavourites() {
         return SugarRecord.listAll(Exchange.class);
     }

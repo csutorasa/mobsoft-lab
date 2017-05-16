@@ -12,7 +12,11 @@ import org.robolectric.annotation.Config;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import hu.bme.aut.mobsoftlab.BuildConfig;
+import hu.bme.aut.mobsoftlab.MobSoftApplication;
+import hu.bme.aut.mobsoftlab.TestComponent;
 import hu.bme.aut.mobsoftlab.model.RateWithDate;
 import hu.bme.aut.mobsoftlab.ui.currencyexchange.CurrencyExchangeActivity;
 import hu.bme.aut.mobsoftlab.ui.currencyexchange.CurrencyExchangePresenter;
@@ -32,12 +36,13 @@ import static org.mockito.Mockito.verify;
 @Config(constants = BuildConfig.class, sdk = 21)
 public class GetRatesTest {
 
+    @Inject
     protected CurrencyExchangePresenter presenter;
 
     @Before
     public void setup() throws Exception {
         setTestInjector();
-        presenter = new CurrencyExchangePresenter();
+        ((TestComponent) MobSoftApplication.injector).inject(this);
     }
 
     @Test
@@ -53,7 +58,7 @@ public class GetRatesTest {
 
         Assert.assertEquals(1, capturedValues.size());
         BigDecimal rate = capturedValues.get(0);
-        Assert.assertEquals(300.0, rate.doubleValue(), 50.0);
+        Assert.assertEquals(330.0, rate.doubleValue(), 50.0);
     }
 
     @After

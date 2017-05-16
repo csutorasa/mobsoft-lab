@@ -26,6 +26,11 @@ public class MemoryRepository implements Repository {
     }
 
     @Override
+    public void clear() {
+        favorites.clear();
+    }
+
+    @Override
     public List<Exchange> getFavourites() {
         return favorites;
     }

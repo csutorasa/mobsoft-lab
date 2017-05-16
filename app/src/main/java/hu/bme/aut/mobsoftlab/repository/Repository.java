@@ -13,6 +13,8 @@ public interface Repository {
 
     void close();
 
+    void clear();
+
     List<Exchange> getFavourites();
 
     void saveFavorite(Exchange exchange);
