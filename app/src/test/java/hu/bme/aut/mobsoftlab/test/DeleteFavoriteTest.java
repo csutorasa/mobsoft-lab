@@ -61,6 +61,7 @@ public class DeleteFavoriteTest {
         for(Exchange fav : favorites) {
             assertFalse(exchange.getFrom().equals(fav.getFrom()) && exchange.getTo().equals(fav.getTo()));
         }
+        verify(screen).navigateBack();
     }
 
     @After
