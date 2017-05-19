@@ -23,6 +23,11 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="hu.bme.aut.mobsoftlab.model"/>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="14c5c7dbb0346836e822492b2e4d5273cb2eb3db"
+            />
+
 
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
@@ -44,6 +49,6 @@
             android:parentActivityName=".ui.main.MainActivity">
         </activity>
     </application>
-
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>

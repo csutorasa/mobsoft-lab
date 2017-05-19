@@ -14,6 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -78,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements MainScreen {
                         ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
                         ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
                         if(!CurrencyExchangeActivity.class.getName().equals(cn.getClassName())) {
+                            Tracker tracker = MobSoftApplication.getDefaultTracker();
+                            tracker.setScreenName("Exchange");
+                            tracker.send(new HitBuilders.ScreenViewBuilder().build());
                             startActivity(new Intent(MainActivity.this, CurrencyExchangeActivity.class));
                         }
                         break;
